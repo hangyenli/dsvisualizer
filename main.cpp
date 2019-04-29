@@ -14,6 +14,7 @@ void print(vector<int>& v){
     }
     cout<<"\n";
 }
+
 void bubble_sort(vector<int>& v, int size){
     int current_max=size;
     int tmp;
@@ -27,14 +28,41 @@ void bubble_sort(vector<int>& v, int size){
         }
     }
 }
-
+void random_sort(vector<int>& v, int size){
+    while(!is_sorted(v.begin(),v.end())){
+        random_shuffle (v.begin(), v.end());
+    }
+}
+void cocktail_shake_sort(vector<int>& v, int size){
+    //a improved version of bubble sort
+    int current_max=size;
+    int current_min=0;
+    int tmp;
+    for (int i = current_min; i < current_max-1; ++i) {
+        for (int j = 0; j < current_max-1; ++j) {
+            if(v[j]>v[j+1]){
+                tmp=v[j];
+                v[j]=v[j+1];
+                v[j+1]=tmp;
+            }
+        }
+        for (int k = current_max-1; k > current_min+1; --k) {
+            if(v[k]<v[k-1]){
+                tmp=v[k];
+                v[k]=v[k-1];
+                v[k-1]=tmp;
+            }
+        }
+        current_max--;
+        current_min++;
+    }
+}
 int main(int argc,char** argv){
     //vector<int> myvector
     //init(v)
     //print(v)
     //sort(v)
     //print(v)
-
 
     int vector_size;
     cout<<"Please enter the size of vector for sorting"<<endl;
@@ -50,11 +78,12 @@ int main(int argc,char** argv){
     // using myrandom:
     std::random_shuffle ( myvector.begin(), myvector.end(), myrandom);
     print(myvector);
-    cout<<"_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-\n";
+    cout<<"---------------------------------------\n";
     auto start=chrono::high_resolution_clock::now();
 
-    bubble_sort(myvector,vector_size);
-
+//    bubble_sort(myvector,vector_size);
+//    random_sort(myvector,vector_size);
+    cocktail_shake_sort(myvector, vector_size);
     auto stop=chrono::high_resolution_clock::now();
 
     print(myvector);
