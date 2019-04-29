@@ -57,12 +57,30 @@ void cocktail_shake_sort(vector<int>& v, int size){
         current_min++;
     }
 }
+void gnome_sort(vector<int>& v, int size){
+    int current_index=0;
+    int temp;
+    bool need_go_back=false;
+    for (int i = current_index; i < size-1; ++i) {
+        need_go_back=false;
+        if(v[current_index]>v[current_index+1]){
+            swap(v[current_index],v[current_index+1]);
+            need_go_back= true;
+            temp=current_index;
+        }
+        if(need_go_back){
+            for (int j = temp; j > 0; --j) {
+                if(v[j-1]>v[j]){
+                    swap(v[j-1],v[j]);
+                }else{
+                    break;
+                }
+            }
+        }
+        current_index++;
+    }
+}
 int main(int argc,char** argv){
-    //vector<int> myvector
-    //init(v)
-    //print(v)
-    //sort(v)
-    //print(v)
 
     int vector_size;
     cout<<"Please enter the size of vector for sorting"<<endl;
@@ -83,7 +101,8 @@ int main(int argc,char** argv){
 
 //    bubble_sort(myvector,vector_size);
 //    random_sort(myvector,vector_size);
-    cocktail_shake_sort(myvector, vector_size);
+//    cocktail_shake_sort(myvector, vector_size);
+    gnome_sort(myvector,vector_size);
     auto stop=chrono::high_resolution_clock::now();
 
     print(myvector);
