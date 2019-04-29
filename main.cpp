@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <vector>
 #include "detail.h"
+
+
 using namespace std;
 
 int myrandom (int i) { return std::rand()%i;}
@@ -82,6 +84,30 @@ void gnome_sort(vector<int>& v, int size){
     }
 }
 
+void odd_even_sort(vector<int>& v, int size) {
+    while(!is_sorted(v.begin(),v.end())){
+        for (int i = 0; i < size-1; i+=2) {
+            if(v[i]>v[i+1]){
+                swap(v[i],v[i+1]);
+            }
+        }
+        for (int i = 1; i < size-1; i+=2) {
+            if(v[i]>v[i+1]){
+                swap(v[i],v[i+1]);
+            }
+        }
+    }
+    /* 0 1 2 3 4 5 6       length:7
+    * -------------
+    * 5 1 0 4 3 6 2
+    * 1 5 0 4 3 6 2
+    * 1 0 5 3 4 2 6
+    * 0 1 3 5 2 4 6
+    * 0 1 3 2 5 4 6
+    * 0 1 2 3 4 5 6
+    * */
+}
+
 int main(int argc,char** argv){
 
     int vector_size;
@@ -104,7 +130,10 @@ int main(int argc,char** argv){
 //    bubble_sort(myvector,vector_size);
 //    random_sort(myvector,vector_size);
 //    cocktail_shake_sort(myvector, vector_size);
-    gnome_sort(myvector,vector_size);
+//    gnome_sort(myvector,vector_size);
+
+    odd_even_sort(myvector,vector_size);
+
     auto stop=chrono::high_resolution_clock::now();
     print(myvector);
     auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
