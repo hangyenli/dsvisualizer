@@ -4,6 +4,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include "detail.h"
 using namespace std;
 
 int myrandom (int i) { return std::rand()%i;}
@@ -80,6 +81,7 @@ void gnome_sort(vector<int>& v, int size){
         current_index++;
     }
 }
+
 int main(int argc,char** argv){
 
     int vector_size;
@@ -104,13 +106,12 @@ int main(int argc,char** argv){
 //    cocktail_shake_sort(myvector, vector_size);
     gnome_sort(myvector,vector_size);
     auto stop=chrono::high_resolution_clock::now();
-
     print(myvector);
-
     auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
     long time=duration.count();
     int second=time/1000000;
     double left=duration.count()-second*1000000;
     cout<<"sorting: "<<second<<"."<<left<<" seconds"<<endl;
 
+    return 0;
 }
