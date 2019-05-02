@@ -11,6 +11,13 @@ using namespace std;
 
 int myrandom (int i) { return std::rand()%i;}
 
+void swap(int* p1, int* p2){
+    int tmp=*p1;
+    *p1=*p2;
+    *p2=tmp;
+}
+
+
 void print(vector<int>& v){
     for (int i = 0; i < v.size(); ++i) {
         cout<<v[i]<<" ";
@@ -24,9 +31,7 @@ void bubble_sort(vector<int>& v, int size){
     for (int i = 0; i < current_max-1; current_max--) {
         for (int j = 0; j < current_max-1; ++j) {
             if(v[j]>v[j+1]){
-                tmp=v[j];
-                v[j]=v[j+1];
-                v[j+1]=tmp;
+                swap(v[j],v[j+1]);
             }
         }
     }
@@ -44,16 +49,13 @@ void cocktail_shake_sort(vector<int>& v, int size){
     for (int i = current_min; i < current_max-1; ++i) {
         for (int j = 0; j < current_max-1; ++j) {
             if(v[j]>v[j+1]){
-                tmp=v[j];
-                v[j]=v[j+1];
-                v[j+1]=tmp;
+                swap(v[j],v[j+1]);
             }
         }
         for (int k = current_max-1; k > current_min+1; --k) {
             if(v[k]<v[k-1]){
-                tmp=v[k];
-                v[k]=v[k-1];
-                v[k-1]=tmp;
+                swap(v[k],v[k-1]);
+
             }
         }
         current_max--;
@@ -107,6 +109,30 @@ void odd_even_sort(vector<int>& v, int size) {
     * 0 1 2 3 4 5 6
     * */
 }
+void selection_sort(vector<int>& v,int size){
+    vector<int> sorted;
+    int current_min_index;
+    bool find_min= false;
+    int min=9999999;
+    for (int i = 0; i < size; ++i) {
+        while(!find_min){
+            for (int j = 0; j < v.size(); ++j) {
+                if(min>v[j]){
+                    min=v[j];
+                    current_min_index=j;
+                }
+            }
+            sorted.push_back(min);
+            v.erase(v.begin()+current_min_index);
+            find_min=true;
+            current_min_index=0;
+        }
+        find_min=false;
+        min=9999999;
+    }
+    v=sorted;
+}
+
 
 int main(int argc,char** argv){
 
@@ -131,8 +157,8 @@ int main(int argc,char** argv){
 //    random_sort(myvector,vector_size);
 //    cocktail_shake_sort(myvector, vector_size);
 //    gnome_sort(myvector,vector_size);
-
-    odd_even_sort(myvector,vector_size);
+//    odd_even_sort(myvector,vector_size);
+//    selection_sort(myvector,vector_size);
 
     auto stop=chrono::high_resolution_clock::now();
     print(myvector);
