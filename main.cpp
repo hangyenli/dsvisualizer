@@ -11,6 +11,21 @@ using namespace std;
 
 int myrandom (int i) { return std::rand()%i;}
 
+int find_min(vector<int>& v){
+    int min=v[0];
+    for (int i = 1; i < v.size(); ++i) {
+        min=min<v[i]?min:v[i];
+    }
+    return min;
+}
+int find_max(vector<int>& v){
+    int max=v[0];
+    for (int i = 1; i < v.size(); ++i) {
+        max=max>v[i]?max:v[i];
+    }
+    return max;
+}
+
 void swap(int* p1, int* p2){
     int tmp=*p1;
     *p1=*p2;
@@ -70,7 +85,7 @@ void gnome_sort(vector<int>& v, int size){
         need_go_back=false;
         if(v[current_index]>v[current_index+1]){
             swap(v[current_index],v[current_index+1]);
-            need_go_back= true;
+            need_go_back=true;
             temp=current_index;
         }
         if(need_go_back){
@@ -109,30 +124,64 @@ void odd_even_sort(vector<int>& v, int size) {
     * 0 1 2 3 4 5 6
     * */
 }
-void selection_sort(vector<int>& v,int size){
+void selection_sort(vector<int>& v, int size){
     vector<int> sorted;
-    int current_min_index;
-    bool find_min= false;
-    int min=9999999;
+    int min;
     for (int i = 0; i < size; ++i) {
-        while(!find_min){
-            for (int j = 0; j < v.size(); ++j) {
-                if(min>v[j]){
-                    min=v[j];
-                    current_min_index=j;
-                }
+        min=find_min(v);
+        sorted.push_back(min);
+        int current_min_index;
+        for (int j = 0; j < v.size(); ++j) {
+            if(v[j]==min){
+                current_min_index=j;
+                break;
             }
-            sorted.push_back(min);
-            v.erase(v.begin()+current_min_index);
-            find_min=true;
-            current_min_index=0;
         }
-        find_min=false;
-        min=9999999;
+        v.erase(v.begin()+current_min_index);
     }
     v=sorted;
 }
 
+void double_selection_sort(vector<int>& v, int size){
+    vector<int> sorted(size);
+    int min,max;
+    int bottom=0,top=size-1;
+    int current_min_index,current_max_index;
+    bool min_found,max_found;
+    for (int i = 0; v.size()!=0; ++i) {
+        if(top==bottom){
+            int temp=v[0];
+            sorted[top]=temp;
+            v.pop_back();
+            break;
+        }
+        min=find_min(v);
+        max=find_max(v);
+        for (int j = 0; j < v.size() && !(min_found && max_found); ++j) {
+            if(v[j]==min){
+                current_min_index=j;
+                min_found=true;
+            }
+            if(v[j]==max){
+                current_max_index=j;
+                max_found=true;
+            }
+        }
+        min_found=max_found=false;
+        sorted[bottom]=v[current_min_index];
+        sorted[top]=v[current_max_index];
+        if(current_min_index<current_max_index){
+            v.erase(v.begin()+current_max_index);
+            v.erase(v.begin()+current_min_index);
+        }else{
+            v.erase(v.begin()+current_min_index);
+            v.erase(v.begin()+current_max_index);
+        }
+        top--;
+        bottom++;
+    }
+    v=sorted;
+}
 
 int main(int argc,char** argv){
 
@@ -159,7 +208,7 @@ int main(int argc,char** argv){
 //    gnome_sort(myvector,vector_size);
 //    odd_even_sort(myvector,vector_size);
 //    selection_sort(myvector,vector_size);
-
+    double_selection_sort(myvector,vector_size);
     auto stop=chrono::high_resolution_clock::now();
     print(myvector);
     auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
