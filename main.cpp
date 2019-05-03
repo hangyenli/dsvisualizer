@@ -125,62 +125,36 @@ void odd_even_sort(vector<int>& v, int size) {
     * */
 }
 void selection_sort(vector<int>& v, int size){
-    vector<int> sorted;
-    int min;
-    for (int i = 0; i < size; ++i) {
-        min=find_min(v);
-        sorted.push_back(min);
-        int current_min_index;
-        for (int j = 0; j < v.size(); ++j) {
-            if(v[j]==min){
-                current_min_index=j;
-                break;
-            }
-        }
-        v.erase(v.begin()+current_min_index);
+    int i, j, min_idx;
+    for (i = 0; i < size-1; i++)
+    {
+        // Find the minimum element in unsorted vay
+        min_idx = i;
+        for (j = i+1; j < size; j++)
+            if (v[j] < v[min_idx])
+                min_idx = j;
+
+        // Swap the found minimum element with the first element
+        swap(v[min_idx], v[i]);
     }
-    v=sorted;
 }
 
 void double_selection_sort(vector<int>& v, int size){
-    vector<int> sorted(size);
-    int min,max;
-    int bottom=0,top=size-1;
-    int current_min_index,current_max_index;
-    bool min_found,max_found;
-    for (int i = 0; v.size()!=0; ++i) {
-        if(top==bottom){
-            int temp=v[0];
-            sorted[top]=temp;
-            v.pop_back();
-            break;
-        }
-        min=find_min(v);
-        max=find_max(v);
-        for (int j = 0; j < v.size() && !(min_found && max_found); ++j) {
-            if(v[j]==min){
-                current_min_index=j;
-                min_found=true;
+    int i, j, min_idx,max_idx,current_max=size-1;
+    for (i = 0; i < size-1; i++,current_max--){
+        min_idx = i;
+        max_idx = current_max;
+        for (j = i+1; j < current_max+1; j++){
+            if (v[j] < v[min_idx]){
+                min_idx = j;
             }
-            if(v[j]==max){
-                current_max_index=j;
-                max_found=true;
+            if(v[j]>v[max_idx]){
+                max_idx = j;
             }
         }
-        min_found=max_found=false;
-        sorted[bottom]=v[current_min_index];
-        sorted[top]=v[current_max_index];
-        if(current_min_index<current_max_index){
-            v.erase(v.begin()+current_max_index);
-            v.erase(v.begin()+current_min_index);
-        }else{
-            v.erase(v.begin()+current_min_index);
-            v.erase(v.begin()+current_max_index);
-        }
-        top--;
-        bottom++;
+        swap(v[min_idx], v[i]);
+        swap(v[max_idx], v[current_max]);
     }
-    v=sorted;
 }
 
 int main(int argc,char** argv){
