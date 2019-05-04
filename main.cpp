@@ -4,8 +4,8 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <chrono>
 #include "detail.h"
-
 
 using namespace std;
 
@@ -25,21 +25,17 @@ int find_max(vector<int>& v){
     }
     return max;
 }
-
 void swap(int* p1, int* p2){
     int tmp=*p1;
     *p1=*p2;
     *p2=tmp;
 }
-
-
 void print(vector<int>& v){
     for (int i = 0; i < v.size(); ++i) {
         cout<<v[i]<<" ";
     }
     cout<<"\n";
 }
-
 void bubble_sort(vector<int>& v, int size){
     int current_max=size;
     int tmp;
@@ -100,7 +96,6 @@ void gnome_sort(vector<int>& v, int size){
         current_index++;
     }
 }
-
 void odd_even_sort(vector<int>& v, int size) {
     while(!is_sorted(v.begin(),v.end())){
         for (int i = 0; i < size-1; i+=2) {
@@ -138,7 +133,6 @@ void selection_sort(vector<int>& v, int size){
         swap(v[min_idx], v[i]);
     }
 }
-
 void double_selection_sort(vector<int>& v, int size){
     int i, j, min_idx,max_idx,current_max=size-1;
     for (i = 0; i < size-1; i++,current_max--){
@@ -156,6 +150,16 @@ void double_selection_sort(vector<int>& v, int size){
         swap(v[max_idx], v[current_max]);
     }
 }
+void insertion_sort(vector<int>& v, int size) {
+    int current_index,copy;
+    for (current_index = 1; current_index < size; current_index++) {
+        copy = current_index;
+        while (copy > 0 && v[copy - 1] > v[copy]) {
+            swap(v[copy],v[copy-1]);
+            copy--;
+        }
+    }
+}
 
 int main(int argc,char** argv){
 
@@ -166,7 +170,7 @@ int main(int argc,char** argv){
         wcerr<<"invalid input\n";
         return 99;
     }
-    std::srand ( unsigned ( std::time(0) ) );
+    std::srand (unsigned(time(0)));
     std::vector<int> myvector;
     // set some values:
     for (int i=0; i<vector_size; ++i) myvector.push_back(i); // 1 2 3 4 5 6 7 8 9
@@ -182,7 +186,8 @@ int main(int argc,char** argv){
 //    gnome_sort(myvector,vector_size);
 //    odd_even_sort(myvector,vector_size);
 //    selection_sort(myvector,vector_size);
-    double_selection_sort(myvector,vector_size);
+//    double_selection_sort(myvector,vector_size);
+//    insertion_sort(myvector,vector_size);
     auto stop=chrono::high_resolution_clock::now();
     print(myvector);
     auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
@@ -193,3 +198,4 @@ int main(int argc,char** argv){
 
     return 0;
 }
+
