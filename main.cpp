@@ -6,8 +6,8 @@
 #include <vector>
 #include <chrono>
 #include "detail.h"
-
 using namespace std;
+
 
 int myrandom (int i) { return std::rand()%i;}
 
@@ -160,7 +160,48 @@ void insertion_sort(vector<int>& v, int size) {
         }
     }
 }
+int binary_search_vector(vector<int> &v,int value, int low, int high) {
+    if(high<=low){
+        return value>v[low]?(low+1):low;
+    }
+    int mid=(low+high)/2;
+    if (value==v[mid]){
+        return mid+1;
+    }
+    if(value>v[mid]){
+        return binary_search_vector(v,value,mid+1,high);
+    }
+    return binary_search_vector(v,value,low,mid-1);
+}
+void binary_insertion_sort(vector<int>& v, int size){
+    //this is not an binary insort sort, because the function swap numbers to 'sort',
+    // instead of insert, and increment each cell to the next
+    int low=0,high=size-1,current=0,location;
+    for (int i = 0; i < size-1; ++i) {
+        //first swap
+        if(i==0){
+            if(v[current+1]<v[current]){
+                swap(v[current+1],v[current]);
+            }
+            current=i+1;
+            low=current;
+        }else{
+            if(v[current+1]<v[current]){
+                location=binary_search_vector(v,v[current+1],0,low);
+                //move all to the next cell until the one being 'moved away'
+                for (int j = current+1; j > location; --j) {
+                    swap(v[j],v[j-1]);
+                }
+                current++;
+                low=current;
+            }else{
+                current++;
+                low=current;
+            }
 
+        }
+    }
+}
 int main(int argc,char** argv){
 
     int vector_size;
@@ -188,6 +229,7 @@ int main(int argc,char** argv){
 //    selection_sort(myvector,vector_size);
 //    double_selection_sort(myvector,vector_size);
 //    insertion_sort(myvector,vector_size);
+    binary_insertion_sort(myvector,vector_size);
     auto stop=chrono::high_resolution_clock::now();
     print(myvector);
     auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
