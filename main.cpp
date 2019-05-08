@@ -202,6 +202,47 @@ void binary_insertion_sort(vector<int>& v, int size){
         }
     }
 }
+// To find gap between elements
+int getNextGap(int gap)
+{
+    // Shrink gap by Shrink factor
+    gap = (gap*10)/13;
+
+    if (gap < 1)
+        return 1;
+    return gap;
+}
+
+void comb_sort(vector<int>& v,int size){
+    // Initialize gap
+    int gap = size;
+
+    // Initialize swapped as true to make sure that
+    // loop runs
+    bool swapped = true;
+
+    // Keep running while gap is more than 1 and last
+    // iteration caused a swap
+    while (gap != 1 || swapped == true)
+    {
+        // Find next gap
+        gap = getNextGap(gap);
+
+        // Initialize swapped as false so that we can
+        // check if swap happened or not
+        swapped = false;
+
+        // Compare all elements with current gap
+        for (int i=0; i<size-gap; i++)
+        {
+            if (v[i] > v[i+gap])
+            {
+                swap(v[i], v[i+gap]);
+                swapped = true;
+            }
+        }
+    }
+}
 int main(int argc,char** argv){
 
     int vector_size;
@@ -229,7 +270,8 @@ int main(int argc,char** argv){
 //    selection_sort(myvector,vector_size);
 //    double_selection_sort(myvector,vector_size);
 //    insertion_sort(myvector,vector_size);
-    binary_insertion_sort(myvector,vector_size);
+//    binary_insertion_sort(myvector,vector_size);
+    comb_sort(myvector,vector_size);
     auto stop=chrono::high_resolution_clock::now();
     print(myvector);
     auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
