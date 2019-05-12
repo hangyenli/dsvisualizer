@@ -3,6 +3,7 @@
 //
 
 #include "detail.h"
+#include <iostream>
 
 //constructor
 detail::detail() {
@@ -21,9 +22,11 @@ int detail::get_access(){
 //modifier
 bool detail::set_compare(unsigned int i){
     compare=i;
+    return true;
 }
 bool detail::set_access(unsigned int i){
     access=i;
+    return true;
 }
 void detail::increment_compare(){
     compare++;
